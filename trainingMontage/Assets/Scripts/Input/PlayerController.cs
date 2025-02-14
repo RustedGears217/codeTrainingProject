@@ -31,7 +31,17 @@ public class PlayerController : MonoBehaviour
     {
 
 
-      if (_input.actions["Fire"].WasPressedThisFrame())
+        if (GameManager.Instance.State != GameState.Playing) 
+        {
+            return;
+        }
+
+//        if (_input.actions["Pause"].WasPressedThisFrame())
+//        {
+//            GameManager.Instance.TogglePause();
+//        }
+
+        if (_input.actions["Fire"].WasPressedThisFrame())
         {
             var ball = Instantiate(Ball, transform.position, Quaternion.identity);
 
@@ -41,6 +51,11 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (GameManager.Instance.State != GameState.Playing)
+        {
+            return;
+        }
+
         //set direction to the Move action's Vector2 value
         var dir = _input.actions["Move"].ReadValue<Vector2>();
 
