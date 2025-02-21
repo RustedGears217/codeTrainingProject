@@ -36,10 +36,10 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-//        if (_input.actions["Pause"].WasPressedThisFrame())
-//        {
-//            GameManager.Instance.TogglePause();
-//        }
+        if (_input.actions["Pause"].WasPressedThisFrame())
+        {
+            GameManager.Instance.TogglePause();
+        }
 
         if (_input.actions["Fire"].WasPressedThisFrame())
         {
