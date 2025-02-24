@@ -17,6 +17,8 @@ public enum GameState
 
 public class GameManager : Singleton<GameManager>
 {
+
+   
     public GameState State { get; private set; }
     public static event Action<GameState> OnBeforeStateChanged;
     public static event Action<GameState> OnAfterStateChanged;
@@ -31,13 +33,15 @@ public class GameManager : Singleton<GameManager>
 
     public void ChangeState(GameState newState)
     {
+        //Gives other objects a moment to do stuff before the game manager does stuff in this state
         OnBeforeStateChanged?.Invoke(newState);
 
-        State = newState;
-        Debug.Log("Changed Game State to    : " + newState);
+        
+        
 
         _previousState = State;
-
+        State = newState;
+        Debug.Log("Changed Game State to    : " + newState);
         if (_previousState == GameState.Paused)
         {
             Time.timeScale = 1;
@@ -63,6 +67,8 @@ public class GameManager : Singleton<GameManager>
                 //throw new ArgumentOutOfRangeException(nameof(newState), newState, null);
                 break;
         }
+
+        //Gives another chance for objects to do things *after* the game manager does its job(s)
 
         OnAfterStateChanged?.Invoke(newState);
     }

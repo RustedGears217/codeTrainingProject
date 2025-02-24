@@ -559,6 +559,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e1269413ad4f7e41bef234d0db841a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  uranium: {r: 0.7058824, g: 0.99607843, b: 0, a: 255}
 --- !u!60 &1276910594
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -679,7 +680,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -2135585597343286014, guid: 6f77b50a79b6e614a86b11cd2c2605d0, type: 3}
-  m_Color: {r: 0.7082921, g: 1, b: 0, a: 1}
+  m_Color: {r: 0.7058824, g: 0.9960785, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

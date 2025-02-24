@@ -5,6 +5,7 @@ public class EnemyController : MonoBehaviour
 {
     private Rigidbody2D _rigidbody;
     private Vector2 _direction = Vector2.right;
+    public Color uranium = new Color();
 
     void Awake()
     {
@@ -44,6 +45,29 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    //private void OnEnable()
+    //{
+    //    GameManager.OnAfterStateChanged += HandleGameStateChange;
+    //}
+
+    //private void OnDisable()
+    //{
+    //    GameManager.OnAfterStateChanged -= HandleGameStateChange;
+    //}
+
+    //private void HandleGameStateChange(GameState state)
+    //{
+    //    if (state == GameState.Starting)
+    //    {
+    //        GetComponent<SpriteRenderer>().color = Color.grey;
+    //    }
+
+    //    if (state == GameState.Playing)
+    //    {
+    //        GetComponent<SpriteRenderer>().color = Color.magenta;
+    //    }
+    //}
+
     private void OnEnable()
     {
         GameManager.OnAfterStateChanged += HandleGameStateChange;
@@ -51,19 +75,19 @@ public class EnemyController : MonoBehaviour
 
     private void OnDisable()
     {
-        GameManager.OnAfterStateChanged -= HandleGameStateChange;
+        GameManager.OnAfterStateChanged += HandleGameStateChange;
     }
 
     private void HandleGameStateChange(GameState state)
     {
         if (state == GameState.Starting)
         {
-            GetComponent<SpriteRenderer>().color = Color.grey;
+            GetComponent<SpriteRenderer>().color = Color.white;
         }
 
         if (state == GameState.Playing)
         {
-            GetComponent<SpriteRenderer>().color = Color.magenta;
+            GetComponent<SpriteRenderer>().color = uranium;
         }
     }
 }

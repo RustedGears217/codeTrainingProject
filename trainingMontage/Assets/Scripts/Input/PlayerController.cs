@@ -31,14 +31,20 @@ public class PlayerController : MonoBehaviour
     {
 
 
-        if (GameManager.Instance.State != GameState.Playing) 
-        {
-            return;
-        }
+
 
         if (_input.actions["Pause"].WasPressedThisFrame())
         {
             GameManager.Instance.TogglePause();
+        }
+
+        //^^^
+        //If these two if statements are swapped in order, then the game cannot unpause
+        //vvv
+
+        if (GameManager.Instance.State != GameState.Playing)
+        {
+            return;
         }
 
         if (_input.actions["Fire"].WasPressedThisFrame())
