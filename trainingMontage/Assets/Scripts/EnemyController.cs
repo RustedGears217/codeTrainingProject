@@ -1,29 +1,57 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D))]
 public class EnemyController : MonoBehaviour
 {
     private Rigidbody2D _rigidbody;
-    private Vector2 _direction = Vector2.right;
+    private Vector2 _patrolTargetPosition;
     public Color uranium = new Color();
+    private WaypointPath _waypointPath;
+
+    [SerializeField] private float patrolDelay = 1;
+    [SerializeField] private float patrolSpeed = 3;
 
     void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
+        _waypointPath = GetComponentInChildren<WaypointPath>();
     }
 
-    void Start()
+    private IEnumerator Start()
     {
-        StartCoroutine(PatrolCoroutine());
+        if (_waypointPath)
+        {
+            _patrolTargetPosition = _waypointPath.GetNextWaypointPosition();
+        }
+        else
+        {
+
+        }
     }
 
     private void FixedUpdate()
     {
+        if (!_waypointPath)
+        {
+            return;
+        }
+
+        var dir = _patrolTargetPosition - (Vector2)transform.position;
+
+        if (dir.magnitude <= 0.1)
+        {
+            _patrolTargetPosition = _waypointPath.GetNextWaypointPosition();
+
+            dir = _patrolTargetPosition - (Vector2)transform.position;
+        }
+
         //keep resetting the velocity to the
         //direction * speed even if nudged
         if (GameManager.Instance.State == GameState.Playing)
         {
-            _rigidbody.velocity = _direction;
+            _rigidbody.velocity = dir.normalized * patrolSpeed;
         }
          else
         {
@@ -33,17 +61,8 @@ public class EnemyController : MonoBehaviour
 
     //IEnumerator return type for coroutine
     //that can yield for time and come back
-    IEnumerator PatrolCoroutine()
-    {
-        //change the direction every second
-        while (true)
-        {
-            _direction = new Vector2(1, -1);
-            yield return new WaitForSeconds(1);
-            _direction = new Vector2(-1, 1);
-            yield return new WaitForSeconds(1);
-        }
-    }
+
+
 
     //private void OnEnable()
     //{

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.AnimatedValues;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,8 +8,9 @@ public class PlayerController : MonoBehaviour
 {
 
     private Rigidbody2D _rigidbody;
-    public GameObject Ball;
+    [SerializeField] GameObject _ballPrefab;
     private PlayerInput _input;
+    private Vector2 _facingVector = Vector2.right;
 
     void Die()
     {
@@ -49,10 +51,13 @@ public class PlayerController : MonoBehaviour
 
         if (_input.actions["Fire"].WasPressedThisFrame())
         {
-            var ball = Instantiate(Ball, transform.position, Quaternion.identity);
+            var ball = Instantiate(_ballPrefab, transform.position, Quaternion.identity);
 
-            ball.GetComponent<Rigidbody2D>().velocity = Vector2.left * 10f;
+            ball.GetComponent<BallController>()?.SetDirection(_facingVector);
+            ball.GetComponent<Rigidbody2D>().velocity = _facingVector.normalized * 10f;
         }
+
+        
     }
 
     private void FixedUpdate()
@@ -67,5 +72,10 @@ public class PlayerController : MonoBehaviour
 
         //change the velocity to match the Move (every physics update)
         _rigidbody.velocity = dir * 5;
+
+        if (dir.magnitude > 0.5)
+        {
+            _facingVector = _rigidbody.velocity;
+        }
     }
 }
