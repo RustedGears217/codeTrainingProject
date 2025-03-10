@@ -27,7 +27,7 @@ public class EnemyController : MonoBehaviour
         }
         else
         {
-
+            StartCoroutine(PatrolCoroutine());
         }
     }
 
@@ -56,6 +56,18 @@ public class EnemyController : MonoBehaviour
          else
         {
             _rigidbody.velocity = Vector2.zero;
+        }
+    }
+
+    IEnumerator PatrolCoroutine()
+    {
+        //change the direction every second
+        while (true)
+        {
+            _patrolTargetPosition = new Vector2(1, -1);
+            yield return new WaitForSeconds(1);
+            _patrolTargetPosition = new Vector2(-1, 1);
+            yield return new WaitForSeconds(1);
         }
     }
 
