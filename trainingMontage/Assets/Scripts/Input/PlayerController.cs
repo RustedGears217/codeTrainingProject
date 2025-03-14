@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject _ballPrefab;
     private PlayerInput _input;
     private Vector2 _facingVector = Vector2.right;
+    private bool _isRecoiling = false;
 
     void Die()
     {
@@ -62,6 +63,11 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (_isRecoiling)
+        {
+            return;
+        }
+
         if (GameManager.Instance.State != GameState.Playing)
         {
             return;
@@ -77,5 +83,18 @@ public class PlayerController : MonoBehaviour
         {
             _facingVector = _rigidbody.velocity;
         }
+    }
+
+    public void Recoil(Vector2 directionVector)
+    {
+        _rigidbody.AddForce(directionVector, ForceMode2D.Impulse);
+        _isRecoiling = true;
+        Invoke(nameof(StopRecoiling), .3f);
+
+    }
+
+    private void StopRecoiling()
+    {
+        _isRecoiling = false;
     }
 }

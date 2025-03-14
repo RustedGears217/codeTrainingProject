@@ -19,18 +19,6 @@ public class EnemyController : MonoBehaviour
         _waypointPath = GetComponentInChildren<WaypointPath>();
     }
 
-    private IEnumerator Start()
-    {
-        if (_waypointPath)
-        {
-            _patrolTargetPosition = _waypointPath.GetNextWaypointPosition();
-        }
-        else
-        {
-            StartCoroutine(PatrolCoroutine());
-        }
-    }
-
     private void FixedUpdate()
     {
         if (!_waypointPath)
@@ -57,6 +45,20 @@ public class EnemyController : MonoBehaviour
         {
             _rigidbody.velocity = Vector2.zero;
         }
+    }
+
+    private IEnumerator Start()
+    {
+        if (_waypointPath)
+        {
+            _patrolTargetPosition = _waypointPath.GetNextWaypointPosition();
+        }
+        else
+        {
+            StartCoroutine(PatrolCoroutine());
+        }
+
+        yield break;
     }
 
     IEnumerator PatrolCoroutine()
@@ -98,6 +100,16 @@ public class EnemyController : MonoBehaviour
     //        GetComponent<SpriteRenderer>().color = Color.magenta;
     //    }
     //}
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.transform.CompareTag("Player"))
+        {
+            other.transform.GetComponent<HealthSystem>()?.Damage(3);
+            Vector2 awayDirection = (Vector2)(other.transform.position - transform.position);
+            other.transform.GetComponent<PlayerController>()?.Recoil(awayDirection * 3f);
+        }
+    }
 
     private void OnEnable()
     {
